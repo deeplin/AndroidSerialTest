@@ -1,9 +1,13 @@
 package com.david;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.david.core.util.FileUtil;
+import com.david.core.util.LoggerUtil;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +23,6 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.david", appContext.getPackageName());
+
     }
 }
