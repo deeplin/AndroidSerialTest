@@ -13,7 +13,7 @@ import android.util.Log;
 public class SerialPort {
 
 	public static void loadLibrary() {
-		System.loadLibrary("serial_port");
+		System.loadLibrary("SerialPort");
 	}
 
 	/*
