@@ -1,9 +1,8 @@
 package com.david;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import android_serialport_api.SerialPort;
 
@@ -16,5 +15,12 @@ public class MainActivity extends AppCompatActivity {
 
         SerialPort.loadLibrary();
 
+        
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
