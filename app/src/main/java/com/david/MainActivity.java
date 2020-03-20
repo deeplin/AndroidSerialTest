@@ -1,7 +1,6 @@
 package com.david;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +13,8 @@ import android_serialport_api.SerialPort;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int EXECUTE_TIME = 10 * 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
         SerialPort.loadLibrary();
 
-        testOutput();
+//        testOutput();
+
+        send();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void testOutput() {
@@ -39,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
                     continue;
                 }
                 int data = Integer.parseInt(outputArray[index], 16);
-                assert (data == (previous + 1));
-                Log.e("David", index + " " + data + " " + previous);
+                if (data != (previous + 1) % 256) {
+                    LoggerUtil.se(index + " " + data + " " + previous);
+                }
+                LoggerUtil.w(index + " " + data + " " + previous);
                 previous = data;
             }
         } catch (Exception e) {
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void send() {
         SerialControl serialControl = new SerialControl();
         try {
-            serialControl.open("/dev/ttyS2", 9600);
+            serialControl.open("/dev/ttyS2", 115200);
 
             byte[] buffer = new byte[256];
             for (int index = 0; index < buffer.length; index++) {
@@ -64,10 +74,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             LoggerUtil.e(e);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }
