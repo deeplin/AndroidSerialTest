@@ -13,7 +13,7 @@ import android_serialport_api.SerialPort;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int EXECUTE_TIME = 10 * 4;
+    private final int EXECUTE_TIME = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +40,23 @@ public class MainActivity extends AppCompatActivity {
 
             String[] outputArray = outputString.split(" ");
 
+            if (BuildConfig.DEBUG && outputArray.length != 1024 * EXECUTE_TIME ) {
+                throw new AssertionError("Assertion failed");
+            }
+
+//            Log.e("David", "Output length: " + outputArray.length);
+
             int previous = -1;
-            for (int index = 0; index < outputArray.length; index++) {
+            for (int index = 0; index < 1024 * EXECUTE_TIME; index++) {
                 String tmp = outputArray[index];
-                if (tmp.trim().length() == 0) {
-                    continue;
-                }
-                int data = Integer.parseInt(outputArray[index], 16);
+//
+                int data = Integer.parseInt(outputArray[index].trim(), 16);
                 if (data != (previous + 1) % 256) {
                     LoggerUtil.se(index + " " + data + " " + previous);
                 }
-                LoggerUtil.w(index + " " + data + " " + previous);
+                LoggerUtil.w(index + " " + tmp + " " + data + " " + previous);
                 previous = data;
+                Thread.sleep(1);
             }
         } catch (Exception e) {
             LoggerUtil.e(e);
@@ -63,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             serialControl.open("/dev/ttyS2", 115200);
 
-            byte[] buffer = new byte[256];
+            byte[] buffer = new byte[1024];
             for (int index = 0; index < buffer.length; index++) {
                 buffer[index] = (byte) index;
             }
 
-            for (int index = 0; index < 10; index++) {
+            for (int index = 0; index < EXECUTE_TIME; index++) {
                 serialControl.write(buffer, buffer.length);
             }
         } catch (Exception e) {
