@@ -1,6 +1,8 @@
 package android_serialport_api;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,8 +10,8 @@ import java.io.OutputStream;
 public class SerialControl {
 
     private SerialPort serialPort;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+    private FileOutputStream outputStream;
+    private FileInputStream inputStream;
 
     public SerialControl() {
     }

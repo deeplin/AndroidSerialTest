@@ -1,6 +1,7 @@
 package com.david;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,7 @@ import android_serialport_api.SerialPort;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int EXECUTE_TIME = 10;
+    private final int EXECUTE_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +41,25 @@ public class MainActivity extends AppCompatActivity {
 
             String[] outputArray = outputString.split(" ");
 
+            Log.e("David", "Output length: " + outputArray.length);
+
             if (BuildConfig.DEBUG && outputArray.length != 1024 * EXECUTE_TIME ) {
                 throw new AssertionError("Assertion failed");
             }
 
-//            Log.e("David", "Output length: " + outputArray.length);
-
             int previous = -1;
-            for (int index = 0; index < 1024 * EXECUTE_TIME; index++) {
+            for (int index = 0; index < outputArray.length; index++) {
                 String tmp = outputArray[index];
 //
                 int data = Integer.parseInt(outputArray[index].trim(), 16);
                 if (data != (previous + 1) % 256) {
                     LoggerUtil.se(index + " " + data + " " + previous);
                 }
-                LoggerUtil.w(index + " " + tmp + " " + data + " " + previous);
+                if(index % 1024 == 0){
+                    LoggerUtil.w(index + " " + (index / 1024)+" " + tmp + " " + data + " " + previous);
+                }
+
                 previous = data;
-                Thread.sleep(1);
             }
         } catch (Exception e) {
             LoggerUtil.e(e);
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void send() {
+        long start = System.currentTimeMillis();
         SerialControl serialControl = new SerialControl();
         try {
             serialControl.open("/dev/ttyS2", 115200);
@@ -79,5 +83,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             LoggerUtil.e(e);
         }
+        long end = System.currentTimeMillis();
+        Log.e("David", "Time " + (end - start));
     }
 }
