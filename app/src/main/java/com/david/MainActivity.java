@@ -14,7 +14,7 @@ import android_serialport_api.SerialPort;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int EXECUTE_TIME = 10000;
+    private final int EXECUTE_TIME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         send();
     }
+
 
     @Override
     protected void onDestroy() {
@@ -88,5 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         long end = System.currentTimeMillis();
         Log.e("David", "Time " + (end - start));
+
+        serialControl.close();
     }
 }
